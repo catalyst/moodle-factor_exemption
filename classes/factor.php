@@ -64,7 +64,7 @@ class factor extends object_factor_base {
 
 
     /**
-     * Email factor implementation.
+     * Exemption factor implementation.
      *
      * @param \stdClass $user
      */
@@ -74,5 +74,24 @@ class factor extends object_factor_base {
             \tool_mfa\plugininfo\factor::STATE_PASS,
             \tool_mfa\plugininfo\factor::STATE_NEUTRAL,
         ];
+    }
+
+    /**
+     * Exemption factor implementation.
+     *
+     * @param \stdClass $user
+     */
+    public static function add_exemption(\stdClass $user) {
+        global $DB;
+
+        // We don't need to handle logic for dealing with anything here except inserts.
+        // Duplicate records do not cause any issues.
+        $duration = get_config('factor_exemption', 'duration');
+        $record = [
+            'userid' => $user->id,
+            'expiry' => time() + (int) $duration,
+            'timecreated' => time()
+        ];
+        $DB->insert_record('factor_exemption', $record);
     }
 }

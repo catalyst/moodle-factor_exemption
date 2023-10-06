@@ -41,3 +41,6 @@ $settings->add(new admin_setting_configduration('factor_exemption/duration',
     new lang_string('settings:duration', 'factor_exemption'),
     new lang_string('settings:duration_help', 'factor_exemption'), DAYSECS));
 
+$ADMIN->add('toolmfafolder', new admin_externalpage('factor_exemption_manageexemptions',
+    get_string('manageexemptions', 'factor_exemption'),
+    new moodle_url('/admin/tool/mfa/factor/exemption/exemption.php')));
