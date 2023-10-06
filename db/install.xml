@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="admin/tool/mfa/factor/exemption/db" VERSION="20231006" COMMENT="XMLDB file for Moodle admin/tool/mfa/factor/exemption"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="factor_exemption" COMMENT="Table to track user exemptions">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="12" NOTNULL="true" SEQUENCE="false" COMMENT="User id"/>
+        <FIELD NAME="expiry" TYPE="int" LENGTH="16" NOTNULL="true" SEQUENCE="false" COMMENT="Expiry time of the exemption"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="16" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id" COMMENT="userid fkey"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="useexp" UNIQUE="false" FIELDS="userid, expiry" COMMENT="Userid + expiry"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
