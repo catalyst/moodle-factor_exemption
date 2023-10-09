@@ -36,6 +36,8 @@ class exemption extends \moodleform {
     public function definition() {
         $mform = $this->_form;
         $mform->addElement('text', 'user', get_string('form:exemptionentry', 'factor_exemption'));
+        $mform->setType('user', PARAM_TEXT);
+        $mform->addHelpButton('user', 'form:exemptionentry', 'factor_exemption');
         $this->add_action_buttons(true, get_string('resetconfirm', 'tool_mfa'));
     }
 
@@ -50,7 +52,7 @@ class exemption extends \moodleform {
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
         // Try input as username first, then email.
-        $user = core_user::get_user($data['user']);
+        $user = core_user::get_user_by_username($data['user']);
         if (!$user) {
             $user = core_user::get_user_by_email($data['user']);
         }

@@ -77,7 +77,7 @@ class factor extends object_factor_base {
     }
 
     /**
-     * Exemption factor implementation.
+     * Add an exemption for a user.
      *
      * @param \stdClass $user
      */
@@ -93,5 +93,30 @@ class factor extends object_factor_base {
             'timecreated' => time()
         ];
         $DB->insert_record('factor_exemption', $record);
+    }
+
+    /**
+     * Extend an exemption for the user.
+     * This should be used instead of creating a new extension to avoid cluttering the table with duplicate records.
+     *
+     * @param int $eid the exemption record id.
+     */
+    public static function extend_exemption(int $eid) {
+        global $DB;
+
+        $duration = get_config('factor_exemption', 'duration');
+        $DB->set_field('factor_exemption', 'expiry', time() + (int) $duration, ['id' => $eid]);
+    }
+
+    /**
+     * Delete an exemption for the user.
+     * This doesn't do a real delete,  just sets the expiry in the past.
+     *
+     * @param int $eid the exemption record id.
+     */
+    public static function delete_exemption(int $eid) {
+        global $DB;
+
+        $DB->set_field('factor_exemption', 'expiry', time() - 1, ['id' => $eid]);
     }
 }

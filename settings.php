@@ -25,6 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+global $ADMIN;
 $enabled = new admin_setting_configcheckbox('factor_exemption/enabled',
     new lang_string('settings:enablefactor', 'tool_mfa'),
     new lang_string('settings:enablefactor_help', 'tool_mfa'), 0);
@@ -41,6 +42,7 @@ $settings->add(new admin_setting_configduration('factor_exemption/duration',
     new lang_string('settings:duration', 'factor_exemption'),
     new lang_string('settings:duration_help', 'factor_exemption'), DAYSECS));
 
-$ADMIN->add('toolmfafolder', new admin_externalpage('factor_exemption_manageexemptions',
+$ADMIN->add('toolmfafolder', new admin_externalpage('factorexemptionmanageexemptions',
     get_string('manageexemptions', 'factor_exemption'),
-    new moodle_url('/admin/tool/mfa/factor/exemption/exemption.php')));
+    new moodle_url('/admin/tool/mfa/factor/exemption/exemption.php'), 'moodle/site:config', false));
+

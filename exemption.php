@@ -25,20 +25,43 @@
 
 require_once(__DIR__ . '/../../../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
-admin_externalpage_setup('factor_exemption_manageexemptions');
+
+$delete = optional_param('delete', 0, PARAM_INT);
+$extend = optional_param('extend', 0, PARAM_INT);
+
+$context = \context_system::instance();
+$PAGE->set_context($context);
+// We need to load the full admin tree into memory here, otherwise our node isnt locatable as it is loaded conditionally.
+admin_get_root(false, true);
+admin_externalpage_setup('factorexemptionmanageexemptions');
+$url = new moodle_url('/admin/tool/mfa/factor/exemption/exemption.php');
+
+// Process table actions if any.
+if ($extend !== 0) {
+    \factor_exemption\factor::extend_exemption($extend);
+    redirect($url);
+}
+
+if ($delete !== 0) {
+    \factor_exemption\factor::delete_exemption($delete);
+    redirect($url);
+}
 
 $form = new \factor_exemption\form\exemption();
 
 if ($form->is_cancelled()) {
     redirect('/');
 } else if ($fromform = $form->get_data()) {
-
+    $user = core_user::get_user_by_username($fromform->user);
+    if (!$user) {
+        $user = core_user::get_user_by_email($fromform->user);
+    }
     // Add/update exemption for user.
-    \factor_exemption\factor::add_exemption($data->user);
+    \factor_exemption\factor::add_exemption($user);
 
     // TODO: Emit event.
 
-    \core\notification::success(get_string('exemptionadded', 'factor_exemption', $stringvar));
+    \core\notification::success(get_string('exemptionadded', 'factor_exemption', $fromform->user));
     redirect(new moodle_url('/admin/tool/mfa/factor/exemption/exemption.php'));
 }
 
@@ -47,4 +70,8 @@ echo $OUTPUT->heading(get_string('resetfactor', 'tool_mfa'));
 $form->display();
 
 // Echo table of exempt users
+$url = new moodle_url('/admin/tool/mfa/factor/exemption/exemption.php');
+$table = new \factor_exemption\output\exemption_table('exemptiontable', $url);
+$table->out(100, true);
+
 echo $OUTPUT->footer();
