@@ -38,7 +38,7 @@ class exemption extends \moodleform {
         $mform->addElement('text', 'user', get_string('form:exemptionentry', 'factor_exemption'));
         $mform->setType('user', PARAM_TEXT);
         $mform->addHelpButton('user', 'form:exemptionentry', 'factor_exemption');
-        $this->add_action_buttons(true, get_string('resetconfirm', 'tool_mfa'));
+        $this->add_action_buttons(true);
     }
 
     /**
@@ -58,7 +58,7 @@ class exemption extends \moodleform {
         }
 
         if (!$user) {
-            $errors['user'] = get_string('cannotfinduser', 'factor_exemption');
+            $errors['user'] = get_string('usernotfound', 'tool_mfa');
         }
         
         return $errors;

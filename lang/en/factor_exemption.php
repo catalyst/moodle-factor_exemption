@@ -36,3 +36,6 @@ $string['form:exemptionentry_help'] = 'Enter a username or email to add to the e
 $string['userid'] = 'User ID';
 $string['expiry'] = 'Expiry time';
 $string['extend'] = 'Extend exemption';
+$string['event:exemptionadded'] = 'MFA Exemption added';
+$string['event:exemptionextended'] = 'MFA Exemption extended';
+$string['event:exemptiondeleted'] = 'MFA Exemption deleted';

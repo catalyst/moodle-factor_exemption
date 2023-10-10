@@ -93,6 +93,9 @@ class factor extends object_factor_base {
             'timecreated' => time()
         ];
         $DB->insert_record('factor_exemption', $record);
+
+        $event = \factor_exemption\event\exemption_added::exemption_added_event($user);
+        $event->trigger();
     }
 
     /**
@@ -106,6 +109,10 @@ class factor extends object_factor_base {
 
         $duration = get_config('factor_exemption', 'duration');
         $DB->set_field('factor_exemption', 'expiry', time() + (int) $duration, ['id' => $eid]);
+
+        $event = \factor_exemption\event\exemption_extended::exemption_extended_event($eid);
+        $event->trigger();
+
     }
 
     /**
@@ -118,5 +125,8 @@ class factor extends object_factor_base {
         global $DB;
 
         $DB->set_field('factor_exemption', 'expiry', time() - 1, ['id' => $eid]);
+
+        $event = \factor_exemption\event\exemption_deleted::exemption_deleted_event($eid);
+        $event->trigger();
     }
 }

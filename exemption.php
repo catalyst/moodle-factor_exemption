@@ -23,8 +23,7 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(__DIR__ . '/../../../../../config.php');
-require_once($CFG->libdir . '/adminlib.php');
+require_once(__DIR__ . '/../../../../../config.php'); require_once($CFG->libdir . '/adminlib.php');
 
 $delete = optional_param('delete', 0, PARAM_INT);
 $extend = optional_param('extend', 0, PARAM_INT);
@@ -56,17 +55,14 @@ if ($form->is_cancelled()) {
     if (!$user) {
         $user = core_user::get_user_by_email($fromform->user);
     }
-    // Add/update exemption for user.
     \factor_exemption\factor::add_exemption($user);
 
-    // TODO: Emit event.
-
     \core\notification::success(get_string('exemptionadded', 'factor_exemption', $fromform->user));
-    redirect(new moodle_url('/admin/tool/mfa/factor/exemption/exemption.php'));
+    redirect($url);
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('resetfactor', 'tool_mfa'));
+echo $OUTPUT->heading(get_string('manageexemptions', 'factor_exemption'));
 $form->display();
 
 // Echo table of exempt users
