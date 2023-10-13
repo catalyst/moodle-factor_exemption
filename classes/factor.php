@@ -16,6 +16,7 @@
 
 namespace factor_exemption;
 
+use stdClass;
 use tool_mfa\local\factor\object_factor_base;
 
 /**
@@ -116,17 +117,35 @@ class factor extends object_factor_base {
     }
 
     /**
-     * Delete an exemption for the user.
+     * Expire an exemption for the user.
      * This doesn't do a real delete,  just sets the expiry in the past.
      *
      * @param int $eid the exemption record id.
      */
-    public static function delete_exemption(int $eid) {
+    public static function expire_exemption(int $eid) {
         global $DB;
 
         $DB->set_field('factor_exemption', 'expiry', time() - 1, ['id' => $eid]);
 
-        $event = \factor_exemption\event\exemption_deleted::exemption_deleted_event($eid);
+        $event = \factor_exemption\event\exemption_expired::exemption_expired_event($eid);
         $event->trigger();
+    }
+
+    /**
+     * Helper method to get a user object from a username or email.
+     *
+     * @param string the search term.
+     * @return ?stdClass the found user or null
+     */
+
+    public static function get_searched_user(string $search): ?stdClass {
+        $user = \core_user::get_user_by_username($search);
+        if (!$user) {
+            $user = \core_user::get_user_by_email($search);
+        }
+        if (!$user) {
+            return null;
+        }
+        return $user;
     }
 }

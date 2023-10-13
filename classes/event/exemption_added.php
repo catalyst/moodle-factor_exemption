@@ -68,7 +68,8 @@ class exemption_added extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return "The user with id '{$this->other['userid']}' created an MFA exemption for user with id '{$this->relateduserid}'.";
+        $duration = get_config('factor_exemption', 'duration');
+        return "The user with id '{$this->other['userid']}' created an MFA exemption for user with id '{$this->relateduserid}' with duration {$duration} seconds.";
     }
 
     /**

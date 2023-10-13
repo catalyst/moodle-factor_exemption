@@ -40,7 +40,7 @@ class exemption_extended extends \core\event\base {
      */
     public static function exemption_extended_event(int $eid) {
         global $DB, $USER;
-        $exemption = $DB->get_record('factor_exemption', ['id' => $eid]);
+        $exemption = $DB->get_record('factor_exemption', ['id' => $eid], 'userid', MUST_EXIST);
 
         $data = [
             'relateduserid' => $exemption->userid,
@@ -69,7 +69,8 @@ class exemption_extended extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return "The user with id '{$this->other['userid']}' extended an MFA exemption for user with id '{$this->relateduserid}'.";
+        $duration = get_config('factor_exemption', 'duration');
+        return "The user with id '{$this->other['userid']}' extended an MFA exemption for user with id '{$this->relateduserid}' by {$duration} seconds.";
     }
 
     /**

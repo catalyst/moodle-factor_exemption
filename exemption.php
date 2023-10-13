@@ -22,8 +22,8 @@
  * @copyright   Catalyst IT 2023
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-require_once(__DIR__ . '/../../../../../config.php'); require_once($CFG->libdir . '/adminlib.php');
+require_once(__DIR__ . '/../../../../../config.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 $delete = optional_param('delete', 0, PARAM_INT);
 $extend = optional_param('extend', 0, PARAM_INT);
@@ -42,7 +42,7 @@ if ($extend !== 0) {
 }
 
 if ($delete !== 0) {
-    \factor_exemption\factor::delete_exemption($delete);
+    \factor_exemption\factor::expire_exemption($delete);
     redirect($url);
 }
 
@@ -51,9 +51,10 @@ $form = new \factor_exemption\form\exemption();
 if ($form->is_cancelled()) {
     redirect('/');
 } else if ($fromform = $form->get_data()) {
-    $user = core_user::get_user_by_username($fromform->user);
+    $user = \factor_exemption\factor::get_searched_user($fromform->user);
     if (!$user) {
-        $user = core_user::get_user_by_email($fromform->user);
+        \core\notification::error(get_string('usernotfound', 'tool_mfa'));
+        redirect($url);
     }
     \factor_exemption\factor::add_exemption($user);
 

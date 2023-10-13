@@ -16,8 +16,9 @@
 
 namespace factor_exemption\form;
 
-use core_user;
+defined('MOODLE_INTERNAL') || die;
 
+use core_user;
 require_once("$CFG->libdir/formslib.php");
 
 /**
@@ -51,12 +52,7 @@ class exemption extends \moodleform {
      */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
-        // Try input as username first, then email.
-        $user = core_user::get_user_by_username($data['user']);
-        if (!$user) {
-            $user = core_user::get_user_by_email($data['user']);
-        }
-
+        $user = \factor_exemption\factor::get_searched_user($data['user']);
         if (!$user) {
             $errors['user'] = get_string('usernotfound', 'tool_mfa');
         }
