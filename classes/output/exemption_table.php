@@ -52,7 +52,7 @@ class exemption_table extends \table_sql {
         $this->pageable(true);
         $this->is_downloadable(false);
         $this->define_baseurl($url);
-        
+
         $fields = 'e.id AS eid, u.id AS userid, u.username, u.email, e.timecreated, e.expiry';
         $from = '{factor_exemption} e JOIN {user} u ON e.userid = u.id';
         $where = 'e.expiry > :time';

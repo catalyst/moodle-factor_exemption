@@ -23,7 +23,7 @@ use tool_mfa\local\factor\object_factor_base;
  * Exemption factor class.
  *
  * @package     factor_exemption
- * @author      Peter Burnett <peterburnett@catalyst-au.net> 
+ * @author      Peter Burnett <peterburnett@catalyst-au.net>
  * @copyright   Catalyst IT 2023
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

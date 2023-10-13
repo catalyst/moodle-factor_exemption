@@ -92,9 +92,9 @@ class factor_test extends \advanced_testcase {
         $this->assertEquals(0, $DB->count_records('factor_exemption'));
         \factor_exemption\factor::add_exemption($user);
         $origrecord = $DB->get_record('factor_exemption');
-    
+
         sleep(1);
-        \factor_exemption\factor::delete_exemption($origrecord->id);
+        \factor_exemption\factor::expire_exemption($origrecord->id);
         $this->assertEquals(1, $DB->count_records('factor_exemption'));
         $newrecord = $DB->get_record('factor_exemption');
 
@@ -104,7 +104,7 @@ class factor_test extends \advanced_testcase {
         $this->assertEquals($origrecord->timecreated, $newrecord->timecreated);
     }
 
-    function test_get_state() {
+    public function test_get_state() {
         global $DB;
         $this->resetAfterTest(true);
 
@@ -113,14 +113,14 @@ class factor_test extends \advanced_testcase {
         // No points to start.
         $this->assertEquals(\tool_mfa\plugininfo\factor::STATE_NEUTRAL, $factor->get_state());
         $this->assertEquals(0, $DB->count_records('factor_exemption'));
-        
+
         // Add an exemption and check points.
         \factor_exemption\factor::add_exemption($user);
         $record = $DB->get_record('factor_exemption');
         $this->assertEquals(\tool_mfa\plugininfo\factor::STATE_PASS, $factor->get_state());
 
         // Delete exemption and confirm no points again.
-        \factor_exemption\factor::delete_exemption($record->id);
+        \factor_exemption\factor::expire_exemption($record->id);
         $this->assertEquals(\tool_mfa\plugininfo\factor::STATE_NEUTRAL, $factor->get_state());
     }
 }

@@ -56,7 +56,6 @@ class exemption extends \moodleform {
         if (!$user) {
             $errors['user'] = get_string('usernotfound', 'tool_mfa');
         }
-        
         return $errors;
     }
 }
