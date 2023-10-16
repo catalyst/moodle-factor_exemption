@@ -16,6 +16,14 @@
 
 namespace factor_exemption\output;
 
+/**
+ * Table to display user exemptions, along with management actions.
+ *
+ * @package     factor_exemption
+ * @author      Peter Burnett <peterburnett@catalyst-au.net>
+ * @copyright   Catalyst IT 2023
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class exemption_table extends \table_sql {
     /**
      * Sets up the table_log parameters.
@@ -63,7 +71,7 @@ class exemption_table extends \table_sql {
     /**
      * Generate content for actions column.
      *
-     * @param object row object
+     * @param object $row object
      * @return string html used to display the manage column field.
      */
     public function col_actions($row) {
@@ -84,7 +92,7 @@ class exemption_table extends \table_sql {
     /**
      * Generate content for timecreated column.
      *
-     * @param object row object
+     * @param object $row object
      * @return string html used to display the manage column field.
      */
     public function col_timecreated($row) {
@@ -95,7 +103,7 @@ class exemption_table extends \table_sql {
     /**
      * Generate content for expiry column.
      *
-     * @param object row object
+     * @param object $row object
      * @return string html used to display the manage column field.
      */
     public function col_expiry($row) {

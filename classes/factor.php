@@ -134,10 +134,9 @@ class factor extends object_factor_base {
     /**
      * Helper method to get a user object from a username or email.
      *
-     * @param string the search term.
+     * @param string $search the search term.
      * @return ?stdClass the found user or null
      */
-
     public static function get_searched_user(string $search): ?stdClass {
         $user = \core_user::get_user_by_username($search);
         if (!$user) {

@@ -33,7 +33,7 @@ class exemption_expired extends \core\event\base {
     /**
      * Create instance of event.
      *
-     * @param \stdClass $user the User object of the User who the exemption was added for.
+     * @param int $eid The exemption row id to create the event for.
      *
      * @return exemption_expired the exemption added event object.
      * @throws \coding_exception
