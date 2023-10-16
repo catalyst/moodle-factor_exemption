@@ -31,3 +31,4 @@ $plugin->component    = 'factor_exemption';
 $plugin->release      = 2023100400;
 $plugin->maturity     = MATURITY_STABLE;
 $plugin->dependencies = ['tool_mfa' => 2019102400];
+$plugin->supports     = [400, 402];
