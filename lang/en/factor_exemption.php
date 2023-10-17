@@ -38,4 +38,6 @@ $string['extend'] = 'Extend exemption';
 $string['event:exemptionadded'] = 'MFA Exemption added';
 $string['event:exemptionextended'] = 'MFA Exemption extended';
 $string['event:exemptionexpired'] = 'MFA Exemption ended';
-$string['privacy:metadata'] = 'The token factor plugin does not store any personal data.';
+$string['privacy:metadata:factor_exemption:userid'] = 'The User ID of a user marked for exemption';
+$string['privacy:metadata:factor_exemption'] = 'The factor exemption plugin stores user IDs to track MFA exemption periods.';
+
