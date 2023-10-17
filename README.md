@@ -13,7 +13,7 @@ This is a factor plugin for the Moodle [MFA Plugin](https://github.com/catalyst/
 
 ## Branches
 
-All Moodle versions should be on the MOODLE_39_STABLE branch.
+All Moodle versions should be on the MOODLE_400_STABLE branch.
 
 ## Installation
 
