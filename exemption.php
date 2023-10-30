@@ -56,9 +56,16 @@ if ($form->is_cancelled()) {
         \core\notification::error(get_string('usernotfound', 'tool_mfa'));
         redirect($url);
     }
-    \factor_exemption\factor::add_exemption($user);
+    // Check if the submitted user is an admin.
+    // This is also checked inside the factor class for safety.
+    // We check it here so we can display the right notification style for submission.
+    if (is_siteadmin($user)) {
+        \core\notification::error(get_string('adminexemption', 'factor_exemption'));
+    } else {
+        \factor_exemption\factor::add_exemption($user, $fromform->duration);
+        \core\notification::success(get_string('exemptionadded', 'factor_exemption', $fromform->user));
+    }
 
-    \core\notification::success(get_string('exemptionadded', 'factor_exemption', $fromform->user));
     redirect($url);
 }
 

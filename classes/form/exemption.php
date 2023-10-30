@@ -39,6 +39,12 @@ class exemption extends \moodleform {
         $mform->addElement('text', 'user', get_string('form:exemptionentry', 'factor_exemption'));
         $mform->setType('user', PARAM_TEXT);
         $mform->addHelpButton('user', 'form:exemptionentry', 'factor_exemption');
+
+        $duration = get_config('factor_exemption', 'duration');
+        $mform->addElement('duration', 'duration', get_string('form:durationentry', 'factor_exemption'));
+        $mform->setDefault('duration', $duration);
+        $mform->setType('duration', PARAM_INT);
+
         $this->add_action_buttons(true);
     }
 
@@ -55,6 +61,10 @@ class exemption extends \moodleform {
         $user = \factor_exemption\factor::get_searched_user($data['user']);
         if (!$user) {
             $errors['user'] = get_string('usernotfound', 'tool_mfa');
+        }
+
+        if ($data['duration'] <= 0 ) {
+            $errors['user'] = get_string('form:negativeduration', 'factor_exemption');
         }
         return $errors;
     }

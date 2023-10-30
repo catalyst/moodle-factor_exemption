@@ -82,15 +82,20 @@ class factor extends object_factor_base {
      *
      * @param \stdClass $user
      */
-    public static function add_exemption(\stdClass $user) {
+    public static function add_exemption(\stdClass $user, ?int $duration = null) {
         global $DB;
+
+        // Special case here. We should not process admin exemptions. Too much of a quick bypass.
+        if (is_siteadmin($user)) {
+            return;
+        }
 
         // We don't need to handle logic for dealing with anything here except inserts.
         // Duplicate records do not cause any issues.
-        $duration = get_config('factor_exemption', 'duration');
+        $length = $duration ?? get_config('factor_exemption', 'duration');
         $record = [
             'userid' => $user->id,
-            'expiry' => time() + (int) $duration,
+            'expiry' => time() + (int) $length,
             'timecreated' => time()
         ];
         $DB->insert_record('factor_exemption', $record);
