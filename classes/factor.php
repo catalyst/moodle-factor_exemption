@@ -81,6 +81,7 @@ class factor extends object_factor_base {
      * Add an exemption for a user.
      *
      * @param \stdClass $user
+     * @param int|null $duration
      */
     public static function add_exemption(\stdClass $user, ?int $duration = null) {
         global $DB;
