@@ -16,7 +16,6 @@
 
 namespace factor_exemption;
 
-use stdClass;
 use tool_mfa\local\factor\object_factor_base;
 
 /**
@@ -35,8 +34,30 @@ class factor extends object_factor_base {
      * @param stdClass $user the user to check against.
      * @return array
      */
-    public function get_all_user_factors($user) {
-        return $this->get_singleton_user_factor($user);
+    public function get_all_user_factors(\stdClass $user): array{
+        global $DB;
+
+        $records = $DB->get_records('tool_mfa', [
+            'userid' => $user->id,
+            'factor' => $this->name,
+            'label' => $user->email,
+        ]);
+
+        if (!empty($records)) {
+            return $records;
+        }
+
+        // Null records returned, build new record.
+        $record = [
+            'userid' => $user->id,
+            'factor' => $this->name,
+            'label' => $user->email,
+            'createdfromip' => $user->lastip,
+            'timecreated' => time(),
+            'revoked' => 0,
+        ];
+        $record['id'] = $DB->insert_record('tool_mfa', $record, true);
+        return [(object) $record];
     }
 
     /**
@@ -44,7 +65,7 @@ class factor extends object_factor_base {
      *
      * {@inheritDoc}
      */
-    public function has_input() {
+    public function has_input(): bool {
         return false;
     }
 
@@ -53,7 +74,7 @@ class factor extends object_factor_base {
      *
      * {@inheritDoc}
      */
-    public function get_state() {
+    public function get_state(): string {
         global $DB, $USER;
 
         // As long as the user has an exemption record that hasnt expired yet, they pass.
@@ -69,7 +90,7 @@ class factor extends object_factor_base {
      *
      * @param \stdClass $user
      */
-    public function possible_states($user) {
+    public function possible_states($user): array {
         // Exemption can only be neutral or pass.
         return [
             \tool_mfa\plugininfo\factor::STATE_PASS,
@@ -143,7 +164,7 @@ class factor extends object_factor_base {
      * @param string $search the search term.
      * @return ?stdClass the found user or null
      */
-    public static function get_searched_user(string $search): ?stdClass {
+    public static function get_searched_user(string $search): ?\stdClass {
         $user = \core_user::get_user_by_username($search);
         if (!$user) {
             $user = \core_user::get_user_by_email($search);
